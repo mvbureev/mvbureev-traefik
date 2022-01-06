@@ -7,7 +7,7 @@ stages:
 build:
   stage: build
   tags:
-    - mvbureev
+    - portal-1
   before_script:
     - ls -lsa
     - docker info
@@ -20,7 +20,7 @@ build:
 deploy:
   stage: deploy
   tags:
-    - mvbureev
+    - portal-1
   before_script:
     - docker-compose ps
   script:

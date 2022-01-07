@@ -5,6 +5,7 @@ services:
     image: traefik:2.5.6
     networks:
       - proxy
+    restart: always
     command:
       - --entrypoints.http.address=:80
       - --entrypoints.https.address=:443

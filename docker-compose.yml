@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   traefik:
-    image: traefik:2.4.8
+    image: traefik:2.5.6
     networks:
       - proxy
     command:
@@ -15,6 +15,7 @@ services:
       - --certificatesresolvers.letsencrypt.acme.email=${EMAIL}
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
     labels:
+      - traefik.http.middlewares.traefik-compress.compress=true
       - traefik.http.routers.to-https.rule=HostRegexp(`traefik.${DOMAIN}`)
       - traefik.http.routers.to-https.entrypoints=http
       - traefik.http.routers.to-https.middlewares=to-https
@@ -26,6 +27,7 @@ services:
       - traefik.http.routers.traefik.tls.certresolver=${CERT_RESOLVER}
       - traefik.http.middlewares.to-https.redirectscheme.scheme=https
       - traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_USER}:${TRAEFIK_PASSWORD_HASH}
+      - traefik.http.routers.traefik.middlewares=traefik-compress
     ports:
       - 80:80
       - 443:443

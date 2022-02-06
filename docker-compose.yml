@@ -33,7 +33,7 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - letsencrypt:/letsencrypt
+      - /srv/traefik/letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   # whoami:
@@ -46,10 +46,6 @@ services:
   #     - traefik.http.routers.https.tls=true
   #     - traefik.http.routers.https.tls.certresolver=${CERT_RESOLVER}
   #     - traefik.docker.network=proxy
-
-volumes:
-  letsencrypt:
-
 
 networks:
   proxy:

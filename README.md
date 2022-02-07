@@ -1,3 +1,3 @@
 # mvbureev-traefik
 
-traefik docker
+traefik

@@ -22,12 +22,13 @@ services:
       - traefik.http.routers.to-https.middlewares=to-https
       - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
       - traefik.http.routers.traefik.entrypoints=https
+      - traefik.http.routers.traefik.middlewares=auth
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.tls=true
       - traefik.http.routers.traefik.tls.certresolver=${CERT_RESOLVER}
       - traefik.http.middlewares.to-https.redirectscheme.scheme=https
       - traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_USER}:${TRAEFIK_PASSWORD_HASH}
-      - traefik.http.routers.traefik.middlewares=auth,traefik-compress,redirect-to-https
+      - traefik.http.routers.traefik.middlewares=traefik-compress
     ports:
       - 80:80
       - 443:443

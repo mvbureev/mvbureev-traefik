@@ -7,28 +7,36 @@ services:
       - proxy
     restart: always
     command:
-      - --entrypoints.http.address=:80
-      - --entrypoints.https.address=:443
+      - --global.checknewversion=false
+      - --global.sendanonymoususage=false
       - --providers.docker=true
       - --api=true
+      - --log=true
+      - --log.level=INFO
+      - --entrypoints.http=true
+      - --entrypoints.http.address=:80
+      - --entrypoints.http.http.redirections.entrypoint.to=https
+      - --entrypoints.http.http.redirections.entrypoint.scheme=https
+      - --entrypoints.https=true
+      - --entrypoints.https.address=:443
       - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
       - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http
       - --certificatesresolvers.letsencrypt.acme.email=${EMAIL}
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
     labels:
       - traefik.http.middlewares.traefik-compress.compress=true
-      - traefik.http.routers.to-https.rule=HostRegexp(`traefik.${DOMAIN}`)
-      - traefik.http.routers.to-https.entrypoints=http
-      - traefik.http.routers.to-https.middlewares=to-https
-      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
-      - traefik.http.routers.traefik.entrypoints=https
-      - traefik.http.routers.traefik.middlewares=auth
-      - traefik.http.routers.traefik.service=api@internal
-      - traefik.http.routers.traefik.tls=true
-      - traefik.http.routers.traefik.tls.certresolver=${CERT_RESOLVER}
-      - traefik.http.middlewares.to-https.redirectscheme.scheme=https
-      - traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_USER}:${TRAEFIK_PASSWORD_HASH}
       - traefik.http.routers.traefik.middlewares=traefik-compress
+      # - traefik.http.routers.to-https.rule=HostRegexp(`traefik.${DOMAIN}`)
+      # - traefik.http.routers.to-https.entrypoints=http
+      # - traefik.http.routers.to-https.middlewares=to-https
+      # - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
+      # - traefik.http.routers.traefik.entrypoints=https
+      # - traefik.http.routers.traefik.middlewares=auth
+      # - traefik.http.routers.traefik.service=api@internal
+      # - traefik.http.routers.traefik.tls=true
+      # - traefik.http.routers.traefik.tls.certresolver=${CERT_RESOLVER}
+      # - traefik.http.middlewares.to-https.redirectscheme.scheme=https
+      # - traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_USER}:${TRAEFIK_PASSWORD_HASH}
     ports:
       - 80:80
       - 443:443
